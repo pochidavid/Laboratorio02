@@ -55,7 +55,10 @@ public class lista_productos extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         categoriaSelec.setText("Seleccionado: "+parent.getItemAtPosition(position).toString());
                         product = ProductoRepository.buscarPorCategoria((Categoria) parent.getItemAtPosition(position));
-                        adapterProductos.notifyDataSetChanged();
+                        adapterProductos.clear();
+                        for(Object p : product){
+                            adapterProductos.add((Producto) p);
+                        }
 
                     }
 
