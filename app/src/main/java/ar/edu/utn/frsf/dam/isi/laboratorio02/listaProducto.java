@@ -1,21 +1,25 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.content.Intent;
 
 import java.util.List;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
-import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 
-public class lista_productos extends AppCompatActivity {
+public class listaProducto extends AppCompatActivity {
 
     private Spinner spinner;
     private ArrayAdapter<Categoria> adapterCategoria;
@@ -23,12 +27,24 @@ public class lista_productos extends AppCompatActivity {
     private List product;
     private ListView listaproductos;
 
-
+    private TextView t;
+    private EditText e;
+    private Button b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_productos);
+        setContentView(R.layout.activity_lista_producto);
+
+        int parametro = this.getIntent().getExtras().getInt("Codigo");
+
+        t = (TextView) findViewById(R.id.textView5);
+        t.setVisibility(View.INVISIBLE);
+        e = (EditText) findViewById(R.id.edProdCantidad);
+        e.setVisibility(View.INVISIBLE);
+        b = (Button) findViewById(R.id.btnProdAddPedido);
+        b.setVisibility(View.INVISIBLE);
+
 
         ProductoRepository productos = new ProductoRepository();
 
@@ -67,10 +83,31 @@ public class lista_productos extends AppCompatActivity {
 
                     }
                 }
+
         );
 
+        if(parametro==1){
+            t.setVisibility(View.VISIBLE);
+            e.setVisibility(View.VISIBLE);
+            b.setVisibility(View.VISIBLE);
+        }
 
     }
+    private View.OnClickListener btnProdAddPedido = new View.OnClickListener(){
+        @Override
+        public void onClick(View view){
+            String cantidad = e.getText().toString();
+            Producto p = (Producto) spinner.getItemAtPosition(spinner.getSelectedItemPosition());
 
+            int idProducto = p.getId();
+
+            Intent intentResultado = new Intent();
+            intentResultado.putExtra("cantidad", cantidad);
+            intentResultado.putExtra("idProducto", idProducto);
+            setResult(Activity.RESULT_OK,intentResultado);
+            finish();
+
+        }
+    }
 
 }

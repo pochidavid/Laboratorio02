@@ -12,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnHistorial;
     private Button btnListaProductos;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         btnListaProductos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent();
+                Intent i = new Intent(MainActivity.this, listaProducto.class);
+                i.putExtra("Codigo",0);
                 startActivity(i);
             }
         });

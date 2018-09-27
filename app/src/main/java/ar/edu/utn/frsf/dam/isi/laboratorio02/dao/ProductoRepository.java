@@ -35,22 +35,22 @@ public class ProductoRepository {
         if(!FLAG_INICIALIZADO) inicializar();
     }
 
-    public List<Producto> getLista(){
+    public static List<Producto> getLista(){
         return LISTA_PRODUCTOS;
     }
 
-    public List<Categoria> getCategorias(){
+    public static List<Categoria> getCategorias(){
         return CATEGORIAS_PRODUCTOS;
     }
 
-    public Producto buscarPorId(Integer id){
+    public static Producto buscarPorId(Integer id){
         for(Producto p: LISTA_PRODUCTOS){
             if(p.getId().equals(id)) return p;
         }
         return null;
     }
 
-    public List<Producto> buscarPorCategoria(Categoria cat){
+    public static List<Producto> buscarPorCategoria(Categoria cat){
         List<Producto> resultado = new ArrayList<>();
         for(Producto p:LISTA_PRODUCTOS){
             if(p.getCategoria().getId().equals(cat.getId())) resultado.add(p);
