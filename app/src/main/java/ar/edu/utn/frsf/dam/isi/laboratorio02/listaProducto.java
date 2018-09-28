@@ -31,6 +31,8 @@ public class listaProducto extends AppCompatActivity {
     private EditText e;
     private Button b;
 
+    private Producto productoSeleccionado;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,8 @@ public class listaProducto extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.cmbProductosCategoria);
         final TextView categoriaSelec = (TextView) findViewById(R.id.textView);
 
+        findViewById(R.id.btnProdAddPedido).setOnClickListener(btnProdAddPedido);
+
         adapterCategoria = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, productos.getCategorias());
         adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -61,7 +65,7 @@ public class listaProducto extends AppCompatActivity {
         c.setId(1);
         c.setNombre("Entrada");
         product = ProductoRepository.buscarPorCategoria(c);
-        adapterProductos = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, product);
+        adapterProductos = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, product);
         listaproductos.setAdapter(adapterProductos);
 
 
@@ -86,6 +90,13 @@ public class listaProducto extends AppCompatActivity {
 
         );
 
+        listaproductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                productoSeleccionado = (Producto) adapterProductos.getItem(position);
+            }
+        });
+
         if(parametro==1){
             t.setVisibility(View.VISIBLE);
             e.setVisibility(View.VISIBLE);
@@ -93,21 +104,23 @@ public class listaProducto extends AppCompatActivity {
         }
 
     }
-    private View.OnClickListener btnProdAddPedido = new View.OnClickListener(){
-        @Override
-        public void onClick(View view){
-            String cantidad = e.getText().toString();
-            Producto p = (Producto) spinner.getItemAtPosition(spinner.getSelectedItemPosition());
 
-            int idProducto = p.getId();
+    private final View.OnClickListener btnProdAddPedido = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String c = e.getText().toString();
+            Producto p = productoSeleccionado;
+
+            Integer idProducto = p.getId();
+            Integer cantidad = Integer.parseInt(c);
 
             Intent intentResultado = new Intent();
             intentResultado.putExtra("cantidad", cantidad);
             intentResultado.putExtra("idProducto", idProducto);
-            setResult(Activity.RESULT_OK,intentResultado);
+            setResult(Activity.RESULT_OK, intentResultado);
             finish();
 
         }
-    }
+    };
 
 }

@@ -7,5 +7,10 @@
     <string name="cantidad_a_pedir">Cantidad a pedir</string>
     <string name="_0">0</string>
     <string name="agregar">Agregar</string>
+    <string name="pedido_titulo">Datos del Pedido</string>
+    <string name="pedido_lbl_correo">Correo Electronico</string>
+    <string name="pedido_lbl_modo_entrega">Modo de Entrega</string>
+    <string name="pedido_lbl_direccion">Direccion de Envio</string>
+    <string name="pedido_lbl_hora_entrega">Hora Solicitada (hh:mm)</string>
 
 </resources>
