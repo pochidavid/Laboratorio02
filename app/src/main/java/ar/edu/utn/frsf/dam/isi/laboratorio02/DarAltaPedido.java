@@ -5,9 +5,11 @@ import android.database.DataSetObserver;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -35,19 +37,25 @@ public class DarAltaPedido extends AppCompatActivity {
     private ProductoRepository repositorioProducto;
 
     private ArrayAdapter adapterProductos;
-    private final EditText edtPedido = findViewById(R.id.edtPedidoDireccion);
-    private final EditText emailPedido = findViewById(R.id.edtPedidoCorreo);
-    private final EditText edtHora = findViewById(R.id.edtPedidoHoraEntrega);
+    private EditText edtPedido;
+    private EditText emailPedido;
+    private EditText edtHora;
+    private EditText edtDireccion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dar_alta_pedido);
 
+        edtPedido = findViewById(R.id.edtPedidoDireccion);
+        emailPedido = findViewById(R.id.edtPedidoCorreo);
+        edtHora = findViewById(R.id.edtPedidoHoraEntrega);
+        edtDireccion = findViewById(R.id.edtPedidoDireccion);
 
         edtPedido.setEnabled(false);
 
         findViewById(R.id.btnPedidoAddProducto).setOnClickListener(btnPedidoAddProducto);
+        findViewById(R.id.btnPedidoHacerPedido).setOnClickListener(pedidoHacerPedidoListener);
 
         unPedido = new Pedido();
         repositorioPedido = new PedidoRepository();
@@ -84,7 +92,8 @@ public class DarAltaPedido extends AppCompatActivity {
 
         }
     };
-    private View.OnClickListener btnHacerPedido = new View.OnClickListener() {
+
+    private  View.OnClickListener pedidoHacerPedidoListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             String direccion = edtPedido.getText().toString();
@@ -92,28 +101,47 @@ public class DarAltaPedido extends AppCompatActivity {
             unPedido.setMailContacto(emailPedido.getText().toString());
             unPedido.setEstado(Pedido.Estado.REALIZADO);
 
-            //Para validar hora
-            String[] horaingresada = edtHora.getText().toString().split(":");
-            GregorianCalendar hora = new GregorianCalendar();
-            int valorHora = Integer.valueOf(horaingresada[0]);
-            int valorMinuto = Integer.valueOf(horaingresada[1]);
-            if(valorHora<0 || valorHora>23){
-                Toast.makeText(DarAltaPedido.this, "La hora ingresada ("+valorHora+") es incorrecta", Toast.LENGTH_LONG).show();
-                return;
-            }
-            if(valorMinuto<0 || valorMinuto>59){
-                Toast.makeText(DarAltaPedido.this, "Los minutos ("+valorMinuto+") son incorrectos", Toast.LENGTH_LONG).show();
-                return;
-            }
-            hora.set(Calendar.HOUR_OF_DAY,valorHora);
-            hora.set(Calendar.MINUTE,valorMinuto);
-            hora.set(Calendar.SECOND,Integer.valueOf(0));
-            unPedido.setFecha(hora.getTime());
+            if(true){
+                //Para validar hora
+                String[] horaingresada = edtHora.getText().toString().split(":");
+                GregorianCalendar hora = new GregorianCalendar();
+                int valorHora = Integer.valueOf(horaingresada[0]);
+                int valorMinuto = Integer.valueOf(horaingresada[1]);
+                if(valorHora<0 || valorHora>23){
+                    Toast.makeText(DarAltaPedido.this, "La hora ingresada ("+valorHora+") es incorrecta", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(valorMinuto<0 || valorMinuto>59){
+                    Toast.makeText(DarAltaPedido.this, "Los minutos ("+valorMinuto+") son incorrectos", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                hora.set(Calendar.HOUR_OF_DAY,valorHora);
+                hora.set(Calendar.MINUTE,valorMinuto);
+                hora.set(Calendar.SECOND,Integer.valueOf(0));
+                unPedido.setFecha(hora.getTime());
 
-            repositorioPedido.guardarPedido(unPedido);
+                repositorioPedido.guardarPedido(unPedido);
 
+                unPedido = new Pedido();
+                Log.d("APP_LAB02","Pedido "+unPedido.toString());
+                finish();
+            }else Toast.makeText(getApplicationContext(),"Uno o mas campos estan vacios",Toast.LENGTH_SHORT).show();
         }
     };
+
+    private Boolean validar() {
+        Boolean valido = true;
+
+        if(edtHora.getText().toString().matches("") ||
+                emailPedido.getText().toString().matches("") ||
+                edtPedido.getText().toString().matches("")) valido = false;
+
+        RadioButton radioEnviar = findViewById(R.id.radioEnviar);
+        if(radioEnviar.isChecked() && edtDireccion.getText().toString().matches("")) valido=false;
+
+        return valido;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         if(resultCode== Activity.RESULT_OK){
