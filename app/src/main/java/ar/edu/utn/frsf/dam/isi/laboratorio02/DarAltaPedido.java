@@ -41,6 +41,7 @@ public class DarAltaPedido extends AppCompatActivity {
     private EditText emailPedido;
     private EditText edtHora;
     private EditText edtDireccion;
+    private RadioButton rPedido;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class DarAltaPedido extends AppCompatActivity {
         emailPedido = findViewById(R.id.edtPedidoCorreo);
         edtHora = findViewById(R.id.edtPedidoHoraEntrega);
         edtDireccion = findViewById(R.id.edtPedidoDireccion);
+        rPedido = findViewById(R.id.radioRetira);
 
         edtPedido.setEnabled(false);
 
@@ -100,6 +102,7 @@ public class DarAltaPedido extends AppCompatActivity {
             unPedido.setDireccionEnvio(direccion);
             unPedido.setMailContacto(emailPedido.getText().toString());
             unPedido.setEstado(Pedido.Estado.REALIZADO);
+            unPedido.setRetirar(rPedido.isSelected());
 
             if(true){
                 //Para validar hora

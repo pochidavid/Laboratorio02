@@ -14,7 +14,7 @@ public class HistorialPedido extends AppCompatActivity implements View.OnClickLi
 
     private Button btnHistorialNuevo;
     private Button btnHistorialMenu;
-    private RecyclerView listaPedido;
+    private ListView listaPedido;
     PedidoAdapter adapter;
 
     @Override

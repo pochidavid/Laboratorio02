@@ -20,13 +20,13 @@ import java.util.List;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 
-public class PedidoAdapter extends RecyclerView.Adapter<PedidoHolder> {
+public class PedidoAdapter extends ArrayAdapter<Pedido> {
 
     private Context ctx;
     private List<Pedido> datos;
 
     public PedidoAdapter(Context context, List<Pedido> objects){
-        super(context, 0, objects);
+        super(context,0,objects);
 
         this.ctx = context;
         this.datos = objects;
@@ -37,8 +37,9 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoHolder> {
         LayoutInflater inflater = LayoutInflater.from(this.ctx);
 
         View fila02 = convertView;
+
         if(fila02 == null) {
-            inflater.inflate(R.layout.fila_historial, parent, false);
+            fila02= inflater.inflate(R.layout.fila_historial, parent, false);
         }
         PedidoHolder holder = (PedidoHolder) fila02.getTag();
         if(holder==null){
@@ -47,9 +48,10 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoHolder> {
         }
 
         Pedido p = (Pedido) super.getItem(position);
+
         holder.tvMailPedido.setText(p.getMailContacto());
         holder.tvPrecio.setText(p.total().toString());
-        holder.tvCantidadItems.setText(p.getDetalle().size());
+        holder.tvCantidadItems.setText(Integer.toString(p.getDetalle().size()));
 
         if(p.getRetirar()) holder.tipoEntrega.setImageResource(R.drawable.ic_restaurant);
         else holder.tipoEntrega.setImageResource(R.drawable.ic_truck);
@@ -98,21 +100,5 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoHolder> {
 
         //configuramos la vista
         return fila02;
-    }
-
-    @NonNull
-    @Override
-    public PedidoHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return null;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull PedidoHolder pedidoHolder, int i) {
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return 0;
     }
 }

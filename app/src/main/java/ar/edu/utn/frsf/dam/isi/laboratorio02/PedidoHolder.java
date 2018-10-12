@@ -27,7 +27,7 @@ public class PedidoHolder extends RecyclerView.ViewHolder{
         this.tvHoraEntrega = base.findViewById(R.id.tvHoraEntrega);
         this.tvCantidadItems = base.findViewById(R.id.tvCantidadItems);
         this.tvPrecio = base.findViewById(R.id.tvPrecio);
-        this.estado = base.findViewById(R.id.tipoEntrega);
+        this.estado = base.findViewById(R.id.estado);
         this.tipoEntrega = base.findViewById(R.id.tipoEntrega);
         this.btnCancelar = base.findViewById(R.id.btnCancelar);
     }
