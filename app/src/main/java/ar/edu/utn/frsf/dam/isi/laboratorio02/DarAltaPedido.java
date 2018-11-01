@@ -127,6 +127,39 @@ public class DarAltaPedido extends AppCompatActivity {
 
                 unPedido = new Pedido();
                 Log.d("APP_LAB02","Pedido "+unPedido.toString());
+
+
+                Runnable r = new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            Thread.currentThread().sleep(10000);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
+                        //buscar pedidos no aceptados y aceptarlos automaticamente
+                        List<Pedido> lista = PedidoRepository.getLista();
+                        for(Pedido p:lista){
+                            if(p.getEstado().equals(Pedido.Estado.REALIZADO))
+                                p.setEstado(Pedido.Estado.ACEPTADO);
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Información de pedidos actualizada!",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                };
+                Thread unHilo = new Thread(r);
+                unHilo.start();
+
+                Intent i = new Intent(DarAltaPedido.this, HistorialPedido.class);
+                startActivity(i);
+
+
+
                 finish();
             }else Toast.makeText(getApplicationContext(),"Uno o mas campos estan vacios",Toast.LENGTH_SHORT).show();
         }
