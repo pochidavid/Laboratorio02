@@ -1,6 +1,8 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.database.DataSetObserver;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -81,6 +83,12 @@ public class DarAltaPedido extends AppCompatActivity {
             }
         });
 
+        BroadcastReceiver br = new EstadoPedidoReceiver();
+        IntentFilter filtro = new IntentFilter();
+        filtro.addAction(EstadoPedidoReceiver.ESTADO_ACEPTADO);
+        getApplication().getApplicationContext().registerReceiver(br, filtro);
+
+
 
 
 
@@ -133,15 +141,22 @@ public class DarAltaPedido extends AppCompatActivity {
                     @Override
                     public void run() {
                         try{
-                            Thread.currentThread().sleep(10000);
+                            Thread.currentThread().sleep(5000);
                         }catch (InterruptedException e){
                             e.printStackTrace();
                         }
                         //buscar pedidos no aceptados y aceptarlos automaticamente
                         List<Pedido> lista = PedidoRepository.getLista();
                         for(Pedido p:lista){
-                            if(p.getEstado().equals(Pedido.Estado.REALIZADO))
+                            if(p.getEstado().equals(Pedido.Estado.REALIZADO)){
                                 p.setEstado(Pedido.Estado.ACEPTADO);
+
+                                Intent i = new Intent();
+                                i.setAction(EstadoPedidoReceiver.ESTADO_ACEPTADO);
+                                i.putExtra("idPedido",p.getId());
+
+                                sendBroadcast(i);
+                            }
                         }
                         runOnUiThread(new Runnable() {
                             @Override
