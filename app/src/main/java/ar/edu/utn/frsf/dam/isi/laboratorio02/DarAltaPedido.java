@@ -1,27 +1,21 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.database.DataSetObserver;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.content.Intent;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -43,7 +37,15 @@ public class DarAltaPedido extends AppCompatActivity {
     private EditText emailPedido;
     private EditText edtHora;
     private EditText edtDireccion;
-    private RadioButton rPedido;
+    private RadioGroup rGroup;
+    private RadioButton rRetira;
+    private RadioButton rEnviar;
+    private TextView lblTotalPedido;
+    private Button btnPedidoAddProducto;
+    private Button btnPedidoHacerPedido;
+    private Button btnPedidoQuitarProducto;
+    private Button btnPedidoVolver;
+    private TextView lbl_direccion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +56,22 @@ public class DarAltaPedido extends AppCompatActivity {
         emailPedido = findViewById(R.id.edtPedidoCorreo);
         edtHora = findViewById(R.id.edtPedidoHoraEntrega);
         edtDireccion = findViewById(R.id.edtPedidoDireccion);
-        rPedido = findViewById(R.id.radioRetira);
+        rGroup = findViewById(R.id.radioGroup);
+        rRetira = findViewById(R.id.radioRetira);
+        rEnviar = findViewById(R.id.radioEnviar);
+        lblTotalPedido = findViewById(R.id.lblTotalPedido);
+        btnPedidoAddProducto = findViewById(R.id.btnPedidoAddProducto);
+        btnPedidoHacerPedido = findViewById(R.id.btnPedidoHacerPedido);
+        btnPedidoQuitarProducto = findViewById(R.id.btnPedidoQuitarProducto);
+        btnPedidoVolver = findViewById(R.id.btnPedidoVolver);
+        lbl_direccion = findViewById(R.id.lbl_direccion);
+
 
         edtPedido.setEnabled(false);
 
-        findViewById(R.id.btnPedidoAddProducto).setOnClickListener(btnPedidoAddProducto);
-        findViewById(R.id.btnPedidoHacerPedido).setOnClickListener(pedidoHacerPedidoListener);
+        btnPedidoAddProducto.setOnClickListener(btnPedidoAddProductoListener);
+        btnPedidoHacerPedido.setOnClickListener(pedidoHacerPedidoListener);
+        btnPedidoVolver.setOnClickListener(volverListener);
 
         unPedido = new Pedido();
         repositorioPedido = new PedidoRepository();
@@ -76,24 +88,13 @@ public class DarAltaPedido extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
 
-                RadioButton radioEnviar = (RadioButton) group.findViewById(R.id.radioEnviar);
-
-                if (checkedRadioButton.equals(radioEnviar)) edtPedido.setEnabled(true);
+                if (checkedRadioButton.equals(rEnviar)) edtPedido.setEnabled(true);
                 else edtPedido.setEnabled(false);
             }
         });
 
-        BroadcastReceiver br = new EstadoPedidoReceiver();
-        IntentFilter filtro = new IntentFilter();
-        filtro.addAction(EstadoPedidoReceiver.ESTADO_ACEPTADO);
-        getApplication().getApplicationContext().registerReceiver(br, filtro);
-
-
-
-
-
     }
-    private View.OnClickListener btnPedidoAddProducto = new View.OnClickListener() {
+    private View.OnClickListener btnPedidoAddProductoListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent i = new Intent(DarAltaPedido.this, listaProducto.class);
@@ -110,7 +111,7 @@ public class DarAltaPedido extends AppCompatActivity {
             unPedido.setDireccionEnvio(direccion);
             unPedido.setMailContacto(emailPedido.getText().toString());
             unPedido.setEstado(Pedido.Estado.REALIZADO);
-            unPedido.setRetirar(rPedido.isSelected());
+            unPedido.setRetirar(rRetira.isChecked());
 
             if(true){
                 //Para validar hora
@@ -133,9 +134,9 @@ public class DarAltaPedido extends AppCompatActivity {
 
                 repositorioPedido.guardarPedido(unPedido);
 
-                unPedido = new Pedido();
                 Log.d("APP_LAB02","Pedido "+unPedido.toString());
 
+                unPedido = new Pedido();
 
                 Runnable r = new Runnable() {
                     @Override
@@ -173,10 +174,17 @@ public class DarAltaPedido extends AppCompatActivity {
                 Intent i = new Intent(DarAltaPedido.this, HistorialPedido.class);
                 startActivity(i);
 
-
-
                 finish();
+
             }else Toast.makeText(getApplicationContext(),"Uno o mas campos estan vacios",Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private View.OnClickListener volverListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent mainMenu = new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(mainMenu);
         }
     };
 

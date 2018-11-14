@@ -19,16 +19,17 @@
         <activity android:name=".listaProducto" />
         <activity android:name=".DarAltaPedido" />
         <activity android:name=".HistorialPedido" />
+        <activity android:name=".DetallePedido" />
 
         <receiver
             android:name=".EstadoPedidoReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_ACEPTADO"/>
-                <action android:name="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_CANCELADO"/>
-                <action android:name="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_EN_PREPARACION"/>
-                <action android:name="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_LISTO"/>
+                <action android:name="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_ACEPTADO" />
+                <action android:name="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_CANCELADO" />
+                <action android:name="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_EN_PREPARACION" />
+                <action android:name="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_LISTO" />
             </intent-filter>
         </receiver>
     </application>
