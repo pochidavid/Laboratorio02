@@ -12,5 +12,7 @@
     <string name="pedido_lbl_modo_entrega">Modo de Entrega</string>
     <string name="pedido_lbl_direccion">Direccion de Envio</string>
     <string name="pedido_lbl_hora_entrega">Hora Solicitada (hh:mm)</string>
+    <string name="canal_estado_nombre">Canal1</string>
+    <string name="canal_estado_descr">Canal1</string>
 
 </resources>

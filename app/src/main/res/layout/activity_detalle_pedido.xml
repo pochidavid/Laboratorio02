@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DarAltaPedido">
+    tools:context=".DetallePedido">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -97,30 +97,9 @@
             android:id="@+id/lstPedidoItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" >
+            android:layout_weight="1">
 
         </ListView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnPedidoAddProducto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Agregar Producto" />
-
-            <Button
-                android:id="@+id/btnPedidoQuitarProducto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Quitar Producto" />
-        </LinearLayout>
 
         <TextView
             android:id="@+id/lblTotalPedido"
@@ -129,27 +108,12 @@
             android:layout_weight="1"
             android:text="Total del pedido: $0.00" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/btnPedidoVolver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnPedidoHacerPedido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Hacer Pedido" />
-
-            <Button
-                android:id="@+id/btnPedidoVolver"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Volver" />
-        </LinearLayout>
+            android:text="Volver" />
 
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

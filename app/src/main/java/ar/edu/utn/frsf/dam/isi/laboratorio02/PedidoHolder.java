@@ -1,15 +1,10 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.List;
-
-import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
 public class PedidoHolder extends RecyclerView.ViewHolder{
 
