@@ -1,9 +1,8 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -27,7 +26,10 @@ public class HistorialPedido extends AppCompatActivity implements View.OnClickLi
         listaPedido = findViewById(R.id.lstHistorialPedidos);
         adapter = new PedidoAdapter(this,PedidoRepository.getLista());
         listaPedido.setAdapter(adapter);
+
+
     }
+
 
 
     @Override
