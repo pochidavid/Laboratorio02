@@ -15,6 +15,9 @@ import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 public class EstadoPedidoReceiver extends BroadcastReceiver {
 
     public static String ESTADO_ACEPTADO="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_ACEPTADO";
+    public static String ESTADO_CANCELADO="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_CANCELADO";
+    public static String ESTADO_EN_PREPARACION="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_EN_PREPARACION";
+    public static String ESTADO_LISTO="ar.edu.utn.frsf.dam.isi.laboratorio02.ESTADO_LISTO";
 
 
 
@@ -24,22 +27,23 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
 
         // an Intent broadcast.
         Integer idPedido = intent.getExtras().getInt("idPedido");
+        Pedido p = PedidoRepository.buscarPorId(idPedido);
         String action = intent.getAction();
+
         if(action.equalsIgnoreCase(ESTADO_ACEPTADO)){
-            Pedido p = PedidoRepository.buscarPorId(idPedido);
             Toast.makeText(context,"Pedido para "+ p.getMailContacto()+ " ha cambiado de estado a ACEPTADO", Toast.LENGTH_SHORT).show();
 
 
-        Intent notifyIntent = new Intent(context, DetallePedido.class);
-        // Set the Activity to start in a new, empty task
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent notifyIntent = new Intent(context, DetallePedido.class);
+            // Set the Activity to start in a new, empty task
+            notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        notifyIntent.putExtra("idPedido",idPedido);
-        // Create the PendingIntent
-        PendingIntent notifyPendingIntent = PendingIntent.getActivity(
-                context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
-        );
+            notifyIntent.putExtra("idPedido",idPedido);
+            // Create the PendingIntent
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(
+                    context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            );
 
             NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "CANAL01")
                     .setContentTitle("Tu Pedido fue ACEPTADO")
@@ -57,7 +61,32 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
             notificationManager.notify(idPedido, notification.build());
 
        }
+       else if(action.equalsIgnoreCase(ESTADO_EN_PREPARACION)){
+            Intent notifyIntent = new Intent(context, HistorialPedido.class);
+            // Set the Activity to start in a new, empty task
+            notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
+            // Create the PendingIntent
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(
+                    context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            );
+
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "CANAL01")
+                    .setContentTitle("Tu Pedido esta EN PREPARACION")
+                    .setContentText("El costo será de $"+ p.total()+ "\n Previsto el envio para "+p.getFecha().getTime())
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+                    .setSmallIcon(R.drawable.ic_truck)
+                    .setContentIntent(notifyPendingIntent);
+
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+            // notificationId is a unique int for each notification that you must define
+
+            notificationManager.notify(idPedido, notification.build());
+        }
 
     }
 
