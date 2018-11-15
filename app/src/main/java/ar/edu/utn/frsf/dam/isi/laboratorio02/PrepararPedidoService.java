@@ -30,7 +30,7 @@ public class PrepararPedidoService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(@androidx.annotation.Nullable @Nullable Intent intent) {
+    protected void onHandleIntent(@Nullable Intent intent) {
         try {
             Thread.currentThread().sleep(20000);
         } catch (InterruptedException e) {
