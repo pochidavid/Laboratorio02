@@ -61,7 +61,8 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
             notificationManager.notify(idPedido, notification.build());
 
        }
-       else if(action.equalsIgnoreCase(ESTADO_EN_PREPARACION)){
+       else{
+
             Intent notifyIntent = new Intent(context, HistorialPedido.class);
             // Set the Activity to start in a new, empty task
             notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -72,14 +73,26 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
                     context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
             );
 
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "CANAL01")
-                    .setContentTitle("Tu Pedido esta EN PREPARACION")
-                    .setContentText("El costo será de $"+ p.total()+ "\n Previsto el envio para "+p.getFecha().getTime())
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setAutoCancel(true)
-                    .setSmallIcon(R.drawable.ic_truck)
-                    .setContentIntent(notifyPendingIntent);
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "CANAL01");
 
+            if(action.equalsIgnoreCase(ESTADO_EN_PREPARACION)){
+                notification
+                        .setContentTitle("Tu Pedido esta EN PREPARACION")
+                        .setContentText("El costo será de $"+ p.total()+ "\n Previsto el envio para "+p.getFecha().getTime())
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setAutoCancel(true)
+                        .setSmallIcon(R.drawable.ic_truck)
+                        .setContentIntent(notifyPendingIntent);
+            }
+            else if(action.equalsIgnoreCase(ESTADO_LISTO)){
+                notification
+                        .setContentTitle("Tu Pedido esta LISTO")
+                        .setContentText("Ya puedes retirar tu pedido")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setAutoCancel(true)
+                        .setSmallIcon(R.drawable.ic_truck)
+                        .setContentIntent(notifyPendingIntent);
+            }
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
