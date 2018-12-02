@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnNuevoPedido;
     private Button btnHistorial;
     private Button btnListaProductos;
+    private Button btnPrepararPedidos;
 
 
 
@@ -46,6 +47,15 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(MainActivity.this, listaProducto.class);
                 i.putExtra("Codigo",0);
                 startActivity(i);
+            }
+        });
+
+        btnPrepararPedidos = findViewById(R.id.btnPrepararPedidos);
+        btnPrepararPedidos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PrepararPedidoService.class);
+                startService(intent);
             }
         });
 
