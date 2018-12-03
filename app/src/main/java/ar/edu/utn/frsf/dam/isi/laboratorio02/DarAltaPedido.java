@@ -2,7 +2,9 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -47,6 +49,10 @@ public class DarAltaPedido extends AppCompatActivity {
     private Button btnPedidoVolver;
     private TextView lbl_direccion;
 
+    private SharedPreferences preferences;
+    private Boolean retirar;
+    private String email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +72,19 @@ public class DarAltaPedido extends AppCompatActivity {
         btnPedidoVolver = findViewById(R.id.btnPedidoVolver);
         lbl_direccion = findViewById(R.id.lbl_direccion);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        retirar = preferences.getBoolean("retirar_preference",true);
+        email = preferences.getString("email_preference",null);
 
-        edtPedido.setEnabled(false);
+        emailPedido.setText(email);
+        if(retirar){
+            rRetira.setChecked(true);
+            edtPedido.setEnabled(false);
+        }
+        else{
+            rEnviar.setChecked(true);
+            edtPedido.setEnabled(true);
+        }
 
         btnPedidoAddProducto.setOnClickListener(btnPedidoAddProductoListener);
         btnPedidoHacerPedido.setOnClickListener(pedidoHacerPedidoListener);
