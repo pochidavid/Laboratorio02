@@ -43,4 +43,10 @@
         android:layout_height="wrap_content"
         android:text="CONFIGURACION" />
 
+    <Button
+        android:id="@+id/btnCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="categorias" />
+
 </LinearLayout>
