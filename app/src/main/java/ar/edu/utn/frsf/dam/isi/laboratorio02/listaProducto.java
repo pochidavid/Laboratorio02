@@ -13,6 +13,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.List;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
@@ -48,27 +51,63 @@ public class listaProducto extends AppCompatActivity {
         b.setVisibility(View.INVISIBLE);
 
 
-        ProductoRepository productos = new ProductoRepository();
+        final ProductoRepository productos = new ProductoRepository();
+        int idProductoSel=0;
 
-        spinner = (Spinner) findViewById(R.id.cmbProductosCategoria);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                CategoriaRest catRest = new CategoriaRest();
+                try {
+                    final Categoria[] cats = catRest.listarTodas().toArray(new Categoria[0]);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapterCategoria = new
+                                    ArrayAdapter<Categoria>(listaProducto.this, android.R.layout.simple_spinner_dropdown_item, cats);
+                            spinner = (Spinner) findViewById(R.id.cmbProductosCategoria);
+                            spinner.setAdapter(adapterCategoria);
+                            spinner.setSelection(0);
+
+                            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    adapterProductos.clear();
+                                    adapterProductos.addAll(productos.buscarPorCategoria((Categoria) parent.getItemAtPosition(position)));
+                                    adapterProductos.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+                                }
+                            });
+
+                            product = ProductoRepository.buscarPorCategoria((Categoria) spinner.getSelectedItem());
+                            adapterProductos = new ArrayAdapter<Producto>(listaProducto.this, android.R.layout.simple_list_item_single_choice,product);
+                            listaproductos = (ListView) findViewById(R.id.lstProductos);
+                            listaproductos.setAdapter(adapterProductos);
+
+                        }
+                    });
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+            }};
+
+
+        Thread unHilo = new Thread(r);
+        unHilo.start();
+
         final TextView categoriaSelec = (TextView) findViewById(R.id.textView);
 
         findViewById(R.id.btnProdAddPedido).setOnClickListener(btnProdAddPedido);
 
-        adapterCategoria = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, productos.getCategorias());
-        adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapterCategoria);
-
-        listaproductos = (ListView) findViewById(R.id.lstProductos);
-        Categoria c = new Categoria();
-        c.setId(1);
-        c.setNombre("Entrada");
-        product = ProductoRepository.buscarPorCategoria(c);
-        adapterProductos = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, product);
-        listaproductos.setAdapter(adapterProductos);
 
 
+        /*
         spinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -88,7 +127,9 @@ public class listaProducto extends AppCompatActivity {
                     }
                 }
 
-        );
+        );*/
+
+        listaproductos = (ListView) findViewById(R.id.lstProductos);
 
         listaproductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
