@@ -90,9 +90,7 @@ public class listaProducto extends AppCompatActivity {
 
                         }
                     });
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (JSONException e1) {
+                } catch (Exception e1) {
                     e1.printStackTrace();
                 }
             }};
