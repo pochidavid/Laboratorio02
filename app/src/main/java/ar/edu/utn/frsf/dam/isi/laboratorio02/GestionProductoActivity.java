@@ -15,6 +15,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaRest;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRetrofit;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.RestClient;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;

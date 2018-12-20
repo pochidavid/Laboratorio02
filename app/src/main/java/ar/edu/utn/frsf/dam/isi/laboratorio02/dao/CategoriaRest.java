@@ -1,4 +1,4 @@
-package ar.edu.utn.frsf.dam.isi.laboratorio02;
+package ar.edu.utn.frsf.dam.isi.laboratorio02.dao;
 
 import android.content.Intent;
 import android.util.Log;

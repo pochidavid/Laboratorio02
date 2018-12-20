@@ -13,11 +13,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.List;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaRest;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;

@@ -1,5 +1,7 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
+import android.arch.persistence.room.Room;
+import android.arch.persistence.room.RoomDatabase;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaRest;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.DatabaseRoom;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 
 public class CategoriaActivity extends AppCompatActivity {
@@ -31,8 +35,13 @@ public class CategoriaActivity extends AppCompatActivity {
                 Runnable r = new Runnable() {
                     @Override
                     public void run() {
-                        categoriaRest.crearCategoria(new Categoria(textoCat.getText().toString()));
+                        Categoria c = new Categoria(textoCat.getText().toString());
 
+                        categoriaRest.crearCategoria(c);
+                        DatabaseRoom db = Room.databaseBuilder(getApplicationContext(),
+                                DatabaseRoom.class, "database").build();
+
+                        db.categoriaDao().crearCategoria(c);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
