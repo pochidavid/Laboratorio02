@@ -37,11 +37,10 @@ public class CategoriaActivity extends AppCompatActivity {
                     public void run() {
                         Categoria c = new Categoria(textoCat.getText().toString());
 
-                        categoriaRest.crearCategoria(c);
-                        DatabaseRoom db = Room.databaseBuilder(getApplicationContext(),
-                                DatabaseRoom.class, "database").build();
+                        DatabaseRoom db = DatabaseRoom.getInstance(CategoriaActivity.this);
 
                         db.categoriaDao().crearCategoria(c);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

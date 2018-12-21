@@ -1,6 +1,7 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.app.Activity;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +14,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaDao;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaRest;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.DatabaseRoom;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoDao;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
@@ -25,7 +30,7 @@ public class listaProducto extends AppCompatActivity {
     private Spinner spinner;
     private ArrayAdapter<Categoria> adapterCategoria;
     private ArrayAdapter<Producto> adapterProductos;
-    private List product;
+    private List<Producto> product;
     private ListView listaproductos;
 
     private TextView t;
@@ -33,6 +38,7 @@ public class listaProducto extends AppCompatActivity {
     private Button b;
 
     private Producto productoSeleccionado;
+    private DatabaseRoom db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +55,18 @@ public class listaProducto extends AppCompatActivity {
         b.setVisibility(View.INVISIBLE);
 
 
-        final ProductoRepository productos = new ProductoRepository();
+        //final ProductoRepository productos = new ProductoRepository();
+        db = DatabaseRoom.getInstance(listaProducto.this);
+        product = new ArrayList<>();
+
         int idProductoSel=0;
 
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                CategoriaRest catRest = new CategoriaRest();
+                CategoriaDao catDao = db.categoriaDao();
                 try {
-                    final Categoria[] cats = catRest.listarTodas().toArray(new Categoria[0]);
+                    final Categoria[] cats = catDao.listarCategorias().toArray(new Categoria[0]);
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -71,8 +80,10 @@ public class listaProducto extends AppCompatActivity {
                             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                 @Override
                                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    buscarProductos();
+
                                     adapterProductos.clear();
-                                    adapterProductos.addAll(productos.buscarPorCategoria((Categoria) parent.getItemAtPosition(position)));
+                                    adapterProductos.addAll(product);
                                     adapterProductos.notifyDataSetChanged();
                                 }
 
@@ -81,7 +92,7 @@ public class listaProducto extends AppCompatActivity {
                                 }
                             });
 
-                            product = ProductoRepository.buscarPorCategoria((Categoria) spinner.getSelectedItem());
+                            buscarProductos();
                             adapterProductos = new ArrayAdapter<Producto>(listaProducto.this, android.R.layout.simple_list_item_single_choice,product);
                             listaproductos = (ListView) findViewById(R.id.lstProductos);
                             listaproductos.setAdapter(adapterProductos);
@@ -159,5 +170,19 @@ public class listaProducto extends AppCompatActivity {
 
         }
     };
+
+    private void buscarProductos(){
+        Thread r = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Categoria categoria = (Categoria) spinner.getSelectedItem();
+
+                ProductoDao productos = db.productoDao();
+                if(categoria != null) product = productos.listarPorCategoria(categoria.getId());
+            }
+        });
+
+        r.start();
+    }
 
 }
